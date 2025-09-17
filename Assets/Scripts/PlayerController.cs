@@ -51,6 +51,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!canUseControls) return;
+        
         if (Input.GetKey(up))
         {
             peeController.MoveVertically(1);
