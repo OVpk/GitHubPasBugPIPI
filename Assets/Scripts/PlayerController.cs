@@ -45,7 +45,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool canUseControls = false;
+    public bool canUseControls = true;
     public PeeController peeController;
 
 
@@ -53,31 +53,60 @@ public class PlayerController : MonoBehaviour
     {
         if (!canUseControls) return;
         
-        if (Input.GetKey(up))
+        if (GameManager.Instance.currentGameMode == GameManager.GameMode.InGame)
         {
-            peeController.MoveVertically(1);
-        }
-        else if (Input.GetKey(down))
-        {
-            peeController.MoveVertically(-1);
-        }
+            if (Input.GetKey(up))
+            {
+                peeController.MoveVertically(1);
+            }
+            else if (Input.GetKey(down))
+            {
+                peeController.MoveVertically(-1);
+            }
         
-        if (Input.GetKey(right))
-        {
-            peeController.RotateHorizontally(1);
-        }
-        else if (Input.GetKey(left))
-        {
-            peeController.RotateHorizontally(-1);
+            if (Input.GetKey(right))
+            {
+                peeController.RotateHorizontally(1);
+            }
+            else if (Input.GetKey(left))
+            {
+                peeController.RotateHorizontally(-1);
+            }
+
+            if (Input.GetKeyDown(hold))
+            {
+                peeController.StopPee();
+            }
+            if (Input.GetKeyUp(hold))
+            {
+                peeController.RestartPee();
+            }
         }
 
-        if (Input.GetKeyDown(hold))
+        if (GameManager.Instance.currentGameMode == GameManager.GameMode.SelectCharacter)
         {
-            peeController.StopPee();
+            if (Input.GetKey(up) && Input.GetKey(left))
+            {
+                GameManager.Instance.selectCharacter.AssignerCouleur(SelectCharacter.CouleurEnum.Violet, playerId);
+            }
+            if (Input.GetKey(up) && Input.GetKey(right))
+            {
+                GameManager.Instance.selectCharacter.AssignerCouleur(SelectCharacter.CouleurEnum.Vert, playerId);
+            }
+            if (Input.GetKey(down) && Input.GetKey(left))
+            {
+                GameManager.Instance.selectCharacter.AssignerCouleur(SelectCharacter.CouleurEnum.Bleu, playerId);
+            }
+            if (Input.GetKey(down) && Input.GetKey(right))
+            {
+                GameManager.Instance.selectCharacter.AssignerCouleur(SelectCharacter.CouleurEnum.Rouge, playerId);
+            }
+
+            if (Input.GetKeyDown(hold))
+            {
+                GameManager.Instance.selectCharacter.SelectionerCouleur(playerId);
+            }
         }
-        if (Input.GetKeyUp(hold))
-        {
-            peeController.RestartPee();
-        }
+        
     }
 }

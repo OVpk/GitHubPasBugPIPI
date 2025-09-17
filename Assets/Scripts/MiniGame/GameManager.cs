@@ -26,6 +26,16 @@ public class GameManager : MonoBehaviour
     public GameEvent[] activeEvents;
 
     public static GameManager Instance;
+
+    public SelectCharacter selectCharacter;
+    
+    public enum GameMode
+    {
+        SelectCharacter,
+        InGame
+    }
+
+    public GameMode currentGameMode = GameMode.SelectCharacter;
     
     private void Awake()
     {
@@ -43,12 +53,7 @@ public class GameManager : MonoBehaviour
     public float minWait = 2f;
     public float maxWait = 5f;
 
-    private void Start()
-    {
-        StartCoroutine(GameRoutine());
-    }
-
-    IEnumerator GameRoutine()
+    public IEnumerator GameRoutine()
     {
         //yield return introCinematic.PlayCinematic();
         Debug.Log("cinematic intro");
