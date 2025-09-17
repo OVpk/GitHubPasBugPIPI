@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour
@@ -52,6 +53,29 @@ public class GameManager : MonoBehaviour
     public float roundDuration = 45f;
     public float minWait = 2f;
     public float maxWait = 5f;
+
+    public List<Sprite> alienIcons;
+    public List<string> listNoms;
+
+    public Image logoJoueur1;
+    public Image logoJoueur2;
+    public TMP_Text nomJoueur1;
+    public TMP_Text nomJoueur2;
+
+    public void InitSpecificAlienThings(SelectCharacter.CouleurEnum couleur, PlayerController.PlayerID joueur)
+    {
+        if (joueur == PlayerController.PlayerID.Player1)
+        {
+            logoJoueur1.sprite = alienIcons[(int)couleur];
+            nomJoueur1.text = listNoms[(int)couleur];
+        }
+
+        if (joueur == PlayerController.PlayerID.Player2)
+        {
+            logoJoueur2.sprite = alienIcons[(int)couleur];
+            nomJoueur2.text = listNoms[(int)couleur];
+        }
+    }
 
     public IEnumerator GameRoutine()
     {
