@@ -11,12 +11,14 @@ public abstract class PoolingSystem : MonoBehaviour
 
     public PlayerController.PlayerID playerID;
 
+    public Sprite spriteOfProjectile;
+
     protected void SpawnProjectile()
     {
         if (pool.Count == 0)
         {
             Projectile newProjectile = Instantiate(projectilePrefab, transform);
-            newProjectile.Init(this, playerID);
+            newProjectile.Init(this, playerID, spriteOfProjectile);
             AddToPool(newProjectile);
         }
 

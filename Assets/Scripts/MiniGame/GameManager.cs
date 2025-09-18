@@ -56,25 +56,45 @@ public class GameManager : MonoBehaviour
 
     public List<Sprite> alienIcons;
     public List<string> listNoms;
+    public List<Sprite> peeColorsSprite;
 
     public Image logoJoueur1;
     public Image logoJoueur2;
     public TMP_Text nomJoueur1;
     public TMP_Text nomJoueur2;
 
+    public Sprite spriteJ1;
+    public Sprite spriteJ2;
+
+    public SelectCharacter.CouleurEnum couleurP1;
+    public SelectCharacter.CouleurEnum couleurP2;
+    
     public void InitSpecificAlienThings(SelectCharacter.CouleurEnum couleur, PlayerController.PlayerID joueur)
     {
         if (joueur == PlayerController.PlayerID.Player1)
         {
             logoJoueur1.sprite = alienIcons[(int)couleur];
             nomJoueur1.text = listNoms[(int)couleur];
+            player1.peeController.peeGenerator.spriteOfProjectile = peeColorsSprite[(int)couleur];
+            spriteJ1 = aliens[(int)couleur];
+            couleurP1 = couleur;
         }
 
         if (joueur == PlayerController.PlayerID.Player2)
         {
             logoJoueur2.sprite = alienIcons[(int)couleur];
             nomJoueur2.text = listNoms[(int)couleur];
+            player2.peeController.peeGenerator.spriteOfProjectile = peeColorsSprite[(int)couleur];
+            spriteJ2 = aliens[(int)couleur];
+            couleurP2 = couleur;
         }
+    }
+
+    public GameObject winScreen;
+
+    public void GoGame()
+    {
+        StartCoroutine(GameRoutine());
     }
 
     public IEnumerator GameRoutine()
@@ -85,15 +105,30 @@ public class GameManager : MonoBehaviour
         for (int i = 1; i <= 3; i++)
         {
             Debug.Log($"=== Début Round {i} ===");
-            yield return StartCoroutine(RoundRoutine());
+            yield return RoundRoutine();
             Debug.Log($"=== Fin Round {i} ===");
+            
+            transitionEntreRoundScript.gameObject.SetActive(true);
+            transitionEntreRoundScript.LoadDatas(scoreP1, scoreP2, winningRoundP1, winningRoundP2, spriteJ1, spriteJ2, i);
+            transitionEntreRoundScript.animator.SetTrigger("Start");
 
+            yield return new WaitForSeconds(10f);
+            
+            transitionEntreRoundScript.gameObject.SetActive(false);
+            
+            ClearPoints();
+            
             if (winningRoundP1 == 2 || winningRoundP2 == 2)
                 break;
         }
+        
         Debug.Log("Partie terminée !");
         StopGame();
     }
+    
+    public List<Sprite> aliens;
+
+    public TransitionEntreRoundScript transitionEntreRoundScript;
     
     
 
@@ -147,7 +182,10 @@ public class GameManager : MonoBehaviour
         {
             winningRoundP2++;
         }
+    }
 
+    public void ClearPoints()
+    {
         scoreP1 = 0;
         scoreP2 = 0;
         scoreTextP1.text = scoreP1.ToString();
@@ -203,9 +241,36 @@ public class GameManager : MonoBehaviour
         player1.canUseControls = state;
         player2.canUseControls = state;
     }
+
+    public Image winnerImage;
+    public Image looserImage;
+    public Image backgroundWin;
+
+    public List<Sprite> alienWinners;
+    public List<Sprite> alienLoosers;
+    public List<Sprite> winnerBackgrounds;
+    
+    SelectCharacter.CouleurEnum winnerCouleur;
+    SelectCharacter.CouleurEnum looserCouleur;
     
     private void StopGame()
     {
+        winScreen.SetActive(true);
         
+        
+        if (winningRoundP1 == 2)
+        {
+            winnerCouleur = couleurP1;
+            looserCouleur = couleurP2;
+        }
+        if (winningRoundP2 == 2)
+        {
+            winnerCouleur = couleurP2;
+            looserCouleur = couleurP1;
+        }
+
+        winnerImage.sprite = alienWinners[(int)winnerCouleur];
+        looserImage.sprite = alienLoosers[(int)looserCouleur];
+        backgroundWin.sprite = winnerBackgrounds[(int)winnerCouleur];
     }
 }

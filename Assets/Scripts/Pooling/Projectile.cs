@@ -1,15 +1,17 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Projectile : MonoBehaviour
 {
     private PoolingSystem poolingSystem;
     private Rigidbody rb;
 
-    public void Init(PoolingSystem pool, PlayerController.PlayerID playerID)
+    public void Init(PoolingSystem pool, PlayerController.PlayerID playerID, Sprite sprite)
     {
         rb = GetComponent<Rigidbody>();
         poolingSystem = pool;
         tag = playerID == PlayerController.PlayerID.Player1 ? "P1" : "P2";
+        gameObject.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = sprite;
     }
 
     private void OnCollisionEnter(Collision other)

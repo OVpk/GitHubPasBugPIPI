@@ -119,8 +119,10 @@ public class SelectCharacter : MonoBehaviour
 
     public void BeginGame()
     {
+        GameManager.Instance.InitSpecificAlienThings(choixJoueur1, PlayerController.PlayerID.Player1);
+        GameManager.Instance.InitSpecificAlienThings(choixJoueur2, PlayerController.PlayerID.Player2);
+        GameManager.Instance.GoGame();
         GameManager.Instance.currentGameMode = GameManager.GameMode.InGame;
-        StartCoroutine(GameManager.Instance.GameRoutine());
         Destroy(this.gameObject);
     }
 }
